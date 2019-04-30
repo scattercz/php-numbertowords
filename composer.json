@@ -1,0 +1,25 @@
+{
+    "name": "scattercz/php-numbertowords",
+    "description": "Number/currency to words converter (czech language only)",
+    "type": "library",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Zdeněk Novotný",
+            "email": "scatter@scatter.cz",
+            "homepage": "https://scatter.cz",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^7"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {"scattercz\\": "src/"}
+    }
+}
