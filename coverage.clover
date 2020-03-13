@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1584093079">
-  <project timestamp="1584093079">
+<coverage generated="1584097343">
+  <project timestamp="1584097343">
     <package name="scattercz">
       <file name="/home/scatter/dev/php-numbertowords/src/NumberToWords.php">
         <class name="scattercz\NumberToWords" namespace="scattercz" fullPackage="NumberToWords" category="NumberToWords" package="NumberToWords">

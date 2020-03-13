@@ -134,7 +134,7 @@ class NumberToWords
         if ($amountBelowMillion < 100) return '';
 
         // get thousands
-        $thousands = (int) $amountBelowMillion / 1000;
+        $thousands = (int) floor($amountBelowMillion / 1000);
 
         // return result
         if ($thousands <= 4) {
