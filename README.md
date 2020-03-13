@@ -1,4 +1,8 @@
-# php-numbertowords
+# Number to words
+
+[![Build Status](https://api.travis-ci.org/scattercz/php-numbertowords.svg?branch=master)](https://api.travis-ci.org/scattercz/php-numbertowords)
+[![Build Coverage](https://scrutinizer-ci.com/g/scattercz/php-numbertowords/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/scattercz/php-numbertowords)
+
 Simple PHP number and currency to words converter for czech language.
 
 ### Basic usage

@@ -35,7 +35,6 @@ class NumberToWords
 
     private $outputType = 'number';
 
-    // dummy
     function __construct() {}
 
 
@@ -135,7 +134,7 @@ class NumberToWords
         if ($amountBelowMillion < 100) return '';
 
         // get thousands
-        $thousands = $amountBelowMillion / 1000;
+        $thousands = (int) $amountBelowMillion / 1000;
 
         // return result
         if ($thousands <= 4) {
@@ -158,7 +157,7 @@ class NumberToWords
         if ($amount < 1000000) return '';
     
         // get millions
-        $millions = floor($amount / 1000000);
+        $millions = (int) floor($amount / 1000000);
 
         // return result
         if ($millions <= 4) {
@@ -172,10 +171,10 @@ class NumberToWords
     /**
      * Convert amount to words
      * 
-     * @param int $amount amount
+     * @param mixed $amount amount
      * @return string
      */
-    private function amountToWords(int $amount): string
+    private function amountToWords($amount): string
     {
         $result = '';
 
@@ -271,10 +270,10 @@ class NumberToWords
         $this->checkInput($number);
 
         // we have decimals
-        if (strpos($number, '.') > 0) {
+        if (strpos((string) $number, '.') > 0) {
 
             // split by decimals point
-            $numberParts = explode('.', $number);
+            $numberParts = explode('.', (string) $number);
 
             // units and decimals are empty
             if (empty($numberParts[0]) && empty($numberParts[1])) {
@@ -291,7 +290,7 @@ class NumberToWords
         } else {
 
             // get amount in words
-            $amountInWords = $this->amountToWords($number);
+            $amountInWords = $this->amountToWords((int) $number);
         }
 
         // apply words separator if different from default
@@ -363,179 +362,5 @@ class NumberToWords
 
         return $amountInWords;
     }
-
-/*
-    // currency to words
-    public function CurrencyToWords($number, $separator = ' ')
-    {
-        $this->wordsSeparator = $separator;
-        $this->outputType = 'currency';
-
-        // we have decimals
-        if (strpos($number, '.') > 0) {
-            $numberParts = explode('.', $number);
-            $numberParts[1] = substr($numberParts[1], 0, 2);
-
-            $textKc = $this->numberToWords($numberParts[0]);
-            $textH = $this->numberToWords($numberParts[1]);
-
-            if ($numberParts[0] < 0) $numberParts[0] *= -1;
-            $numberParts[0] = substr($numberParts[0], strlen($numberParts[0]) - 2, strlen($numberParts[0]));
-
-            $currencyString = $textKc . $this->wordsSeparator;
-            if ($numberParts[0] == 0 || $numberParts[0] >= 5) $currencyString .= 'korun';
-            if ($numberParts[0] == 1) $currencyString .= 'koruna';
-            if ($numberParts[0] > 1 && $numberParts[0] < 5) $currencyString .= 'koruny';
-            $currencyString .= $this->wordsSeparator . $textH . $this->wordsSeparator;
-            if ($numberParts[1] == 0 || $numberParts[1] >= 5) $currencyString .= 'haléřů';
-            if ($numberParts[1] == 1) $currencyString .= 'haléř';
-            if ($numberParts[1] > 1 && $numberParts[1] < 5) $currencyString .= 'haléře';
-
-            return $currencyString;
-
-        // no decimals
-        } else {
-            $currencyString = $this->numberToWords($number) . $this->wordsSeparator;
-
-            $number = substr($number, strlen($number) - 2, strlen($number));
-
-            if ($number == 0 || $number >= 5) $currencyString .= 'korun';
-            if ($number == 1) $currencyString .= 'koruna';
-            if ($number > 1 && $number < 5) $currencyString .= 'koruny';
-            $currencyString .= $this->wordsSeparator . 'nula' . $this->wordsSeparator . 'haléřů';
-
-            return $currencyString;
-        }
-    }
-
-    private function ApplySeparator($amountInWords)
-    {
-        return str_replace(' ', $this->wordsSeparator, $amountInWords);
-    }
-
-    private function GetAmountPart_BelowHundred($amount)
-    {
-        if ($amount == 0) return "";
-    
-        $hundreds = floor($amount / 100);
-    
-        $amountBelowHundred = $amount - ($hundreds * 100);
-    
-        if ($amountBelowHundred == 0) return "";
-    
-        $tens = floor($amountBelowHundred / 10);
-        $units = $amountBelowHundred - ($tens * 10);
-    
-        $result = "";
-    
-        if ($tens >= 2) {
-            $result.= $this->namesTens[$tens - 2].$this->wordsSeparator;
-        }
-    
-        if ($amount >= 1 && $amountBelowHundred < 20) {
-            if ($this->outputType == "currency" && $amountBelowHundred == 2) {
-                $result.= $this->two.$this->wordsSeparator;
-            } else {
-                $result.= $this->namesSmall[$amountBelowHundred - 1].$this->wordsSeparator;
-            }
-        } else if ($units > 0) {
-            $result.= $this->namesSmall[$units - 1].$this->wordsSeparator;
-        }
-    
-        return $result;
-    }
-
-    private function GetAmountPart_Hundreds($amount)
-    {
-        if ($amount < 100) return "";
-    
-        $thousands = floor($amount / 1000);
-        $amountBelowThousand = $amount - ($thousands * 1000);
-        if ($amountBelowThousand < 100) return "";
-        $hundreds = floor($amountBelowThousand / 100);
-    
-        $result = "";
-        $result .= $this->namesHundreds[$hundreds - 1] . $this->wordsSeparator;
-    
-        return $result;
-    }
-    
-    private function GetAmountPart_Thousands($amount)
-    {
-        if ($amount < 1000) return "";
-    
-        $millions = floor($amount / 1000000);
-        $amountBelowMillion = $amount - ($millions * 1000000);
-        if ($amountBelowMillion < 100) return "";
-    
-        $thousands = $amountBelowMillion / 1000;
-        $result = "";
-    
-        if ($thousands <= 4) {
-            $result .= $this->namesThousands[$thousands - 1] . $this->wordsSeparator;
-        } else {
-            $result .= $this->AmmountWords($thousands) . $this->wordsSeparator.$this->namesThousands[count($this->namesThousands) - 1] . ($amount >= 2000 && $amount < 5000 ? 'e' : '') . $this->wordsSeparator;
-        }
-    
-        return $result;
-    }
-    
-    private function GetAmountPart_Millions($amount)
-    {
-        if ($amount < 1000000) return "";
-    
-        $millions = floor($amount / 1000000);
-    
-        $result = "";
-    
-        if ($millions <= 4) {
-            $result.= $this->namesMillions[$millions - 1] . $this->wordsSeparator;
-        } else {
-            $result.= $this->AmmountWords($millions).$this->wordsSeparator.$this->namesMillions[count($this->namesMillions) - 1].$this->wordsSeparator;
-        }
-    
-        return $result;
-    }
-
-    private function AmmountWords($amount)
-    {
-        if ($amount == 0) return $this->zero;
-        if ($amount == 2) return $this->two; // aby to vrátilo "dvě" místo "dva"
-    
-        $result = "";
-    
-        if ($amount < 0) {
-            $result .= $this->minus . $this->wordsSeparator;
-            $amount *= -1;
-        }
-
-        if ($amount >= 1000000) {
-            $result.= $this->GetAmountPart_Millions($amount);
-        }
-    
-        if ($amount >= 1000) {
-            $result.= $this->GetAmountPart_Thousands($amount);
-        }
-    
-        if ($amount >= 100) {
-            $result.= $this->GetAmountPart_Hundreds($amount);
-        }
-    
-        $result.= $this->GetAmountPart_BelowHundred($amount);
-    
-        $result = $this->ApplySeparator($result);
-    
-        return $result;
-    }
-
-    // number to words
-    public function NumberToWords($number, $separator = ' ')
-    {
-        $this->wordsSeparator = $separator;
-        $this->outputType = 'number';
-
-        return $this->AmmountWords($number);
-    }
-*/
 
 }
